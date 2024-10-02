@@ -25,22 +25,26 @@
   - [Plan to create a VM](#plan-to-create-a-vm)
     - [Creating a VNet in Azure](#creating-a-vnet-in-azure-1)
   - [Linux commands](#linux-commands)
+  - [Managing file ownership.](#managing-file-ownership)
     - [Why is managing file ownership important?](#why-is-managing-file-ownership-important)
     - [What is the command to view file ownership?](#what-is-the-command-to-view-file-ownership)
     - [What permissions are set when a user creates a file or directory? Who does the file or directory belong to?](#what-permissions-are-set-when-a-user-creates-a-file-or-directory-who-does-the-file-or-directory-belong-to)
     - [Why does the owner, by default, not receive execute permissions when they create a file?](#why-does-the-owner-by-default-not-receive-execute-permissions-when-they-create-a-file)
     - [What command is used to change the owner of a file or directory?](#what-command-is-used-to-change-the-owner-of-a-file-or-directory)
+  - [Managing file permissions.](#managing-file-permissions)
     - [Does being the owner of a file mean you have full permissions on that file? Explain.](#does-being-the-owner-of-a-file-mean-you-have-full-permissions-on-that-file-explain)
     - [If you give permissions to the User entity, what does this mean?](#if-you-give-permissions-to-the-user-entity-what-does-this-mean)
     - [If you give permissions to the Group entity, what does this mean?](#if-you-give-permissions-to-the-group-entity-what-does-this-mean)
     - [If you give permissions to the Other entity, what does this mean?](#if-you-give-permissions-to-the-other-entity-what-does-this-mean)
     - [You give the following permissions to a file: User permissions are read-only, Group permissions are read and write, Other permissions are read, write, and execute. You are logged in as the user who is the owner of the file. What permissions will you have on this file? Explain.](#you-give-the-following-permissions-to-a-file-user-permissions-are-read-only-group-permissions-are-read-and-write-other-permissions-are-read-write-and-execute-you-are-logged-in-as-the-user-who-is-the-owner-of-the-file-what-permissions-will-you-have-on-this-file-explain)
     - [Here is one line from ls -l. Work out everything you can about permissions on this file or directory.](#here-is-one-line-from-ls--l-work-out-everything-you-can-about-permissions-on-this-file-or-directory)
+  - [Managing file permissions using numeric values](#managing-file-permissions-using-numeric-values)
     - [What numeric values are assigned to each permission?](#what-numeric-values-are-assigned-to-each-permission)
     - [What value can you assign to get read + write permissions?](#what-value-can-you-assign-to-get-read--write-permissions)
     - [What value would assign read, write, and execute permissions?](#what-value-would-assign-read-write-and-execute-permissions)
     - [What value would assign read and execute permissions?](#what-value-would-assign-read-and-execute-permissions)
     - [Often, a file or directory's mode/permissions are represented by 3 numbers. What do you think 644 would mean?](#often-a-file-or-directorys-modepermissions-are-represented-by-3-numbers-what-do-you-think-644-would-mean)
+  - [Changing file permissions](#changing-file-permissions)
     - [What command changes file permissions?](#what-command-changes-file-permissions)
     - [To change permissions on a file, what must the end user be? (2 answers)](#to-change-permissions-on-a-file-what-must-the-end-user-be-2-answers)
     - [Give examples of some different ways/syntaxes to set permissions on a new file (named testfile.txt) to:](#give-examples-of-some-different-wayssyntaxes-to-set-permissions-on-a-new-file-named-testfiletxt-to)
@@ -307,20 +311,79 @@ Removes a directory and its contents recursively.
 rm -r <directory_name>
 ```
 
+Escape character; ignores the special meaning of the next character.
 
-\: Escape character; ignores the special meaning of the next character.
-touch <file_name>: Creates an empty file or updates the timestamp of an existing file.
-cat <file_name>: Displays the contents of a file.
-nano <file_name>: Opens a file for editing; creates it if it doesn't exist.
-head -<number> <file_name>: Displays the first <number> lines of a file.
-nl <file_name>: Displays a file with line numbers.
-cat <file_name> | grep <word>: Searches the file for lines containing <word> and prints them.
-sudo apt install <package_name>: Installs the specified package (requires superuser privileges).
-sudo apt update: Updates the package list.
-sudo apt install tree: Installs 'tree' to display directories in a tree-like format.
-sudo apt upgrade -y: Upgrades all installed packages to the latest versions (use with caution).
-sudo su: Switches to the superuser account (use with caution; remember to exit when done).
+```bash
+\
+```
 
+Creates an empty file or updates the timestamp of an existing file.
+
+```bash
+touch <file_name>
+```
+
+Displays the contents of a file.
+
+```bash
+cat <file_name>
+```
+
+Opens a file for editing; creates it if it doesn't exist.
+
+```bash
+nano <file_name>
+```
+
+Displays the first <number> lines of a file.
+
+```bash
+head -<number> <file_name>
+```
+
+Displays a file with line numbers.
+
+```bash
+nl <file_name>
+```
+
+Searches the file for lines containing <word> and prints them.
+
+```bash
+cat <file_name> | grep <word>
+```
+
+Installs the specified package (requires superuser privileges).
+
+```bash
+sudo apt install <package_name>
+```
+
+Updates the package list.
+
+```bash
+sudo apt update
+```
+
+Installs 'tree' to display directories in a tree-like format.
+
+```bash
+sudo apt install tree
+```
+
+Upgrades all installed packages to the latest versions (use with caution).
+
+```bash
+sudo apt upgrade -y
+```
+
+Switches to the superuser account (use with caution; remember to exit when done).
+
+```bash
+sudo su
+```
+
+## Managing file ownership.
 
 ### Why is managing file ownership important?
 
@@ -341,6 +404,8 @@ Because most new files are regular data files, not executable programs, the syst
 ### What command is used to change the owner of a file or directory?
 
 Use the chown command to change the owner of a file or directory. For example: chown new_owner filename.
+
+## Managing file permissions.
 
 ### Does being the owner of a file mean you have full permissions on that file? Explain.
 
@@ -376,6 +441,8 @@ As the owner, you will have read-only permissions on the file because the user (
 * Size: The file is 123 bytes.
 * Last Modified: The file was last modified on November 25 at 18:36.
 * Filename: The name of the file is keeprunning.sh.
+
+## Managing file permissions using numeric values
 
 ### What numeric values are assigned to each permission?
 
@@ -420,6 +487,8 @@ Therefore, 644 means:
 * The owner has read and write permissions.
 * The group has read-only permission.
 * Others have read-only permission.
+
+## Changing file permissions
 
 ### What command changes file permissions?
 
