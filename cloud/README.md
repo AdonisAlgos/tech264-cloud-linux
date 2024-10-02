@@ -4,8 +4,8 @@
   - [How Do We Know If Something Is in the Cloud?](#how-do-we-know-if-something-is-in-the-cloud)
   - [Differences Between On-Premises and Cloud](#differences-between-on-premises-and-cloud)
   - [Cloud Deployment Models](#cloud-deployment-models)
-    - [Private Cloud](#private-cloud)
-    - [Public Cloud](#public-cloud)
+    - [1. Private Cloud](#1-private-cloud)
+    - [2. Public Cloud](#2-public-cloud)
     - [3. Hybrid Cloud](#3-hybrid-cloud)
     - [4. Multi-Cloud](#4-multi-cloud)
   - [Types of Cloud Services](#types-of-cloud-services)
@@ -48,7 +48,7 @@ An application or service is considered **"in the cloud"** if it is delivered ov
 
 ## Cloud Deployment Models
 
-### Private Cloud
+### 1. Private Cloud
 
 **Definition**: Cloud infrastructure dedicated to a single organization.
 
@@ -56,7 +56,7 @@ An application or service is considered **"in the cloud"** if it is delivered ov
 * Enhanced security and control.
 * Can be on-premises or hosted externally.
 
-### Public Cloud
+### 2. Public Cloud
 
 **Definition**: Services offered over the public internet and shared among multiple organizations.
 
@@ -121,9 +121,9 @@ An application or service is considered **"in the cloud"** if it is delivered ov
 ## OpEx vs. CapEx in Cloud Computing
 
 * **Capital Expenditure (CapEx)**: Upfront costs for physical assets.
-* *Example*: Purchasing servers.
+  *Example*: Purchasing servers.
 * **Operational Expenditure (OpEx)**: Ongoing expenses for services.
-* *Example*: Monthly cloud service fees.
+  *Example*: Monthly cloud service fees.
 
 ### Relation to Cloud
 
@@ -132,12 +132,12 @@ An application or service is considered **"in the cloud"** if it is delivered ov
 
 ## Is Migrating to the Cloud Always Cheaper?
 
-Not always. While the cloud can reduce capital expenses, factors such as:
+Not always. While the cloud can reduce capital expenses, factors such as the below, can lead to higher overall costs. It's essential to perform a thorough cost-benefit analysis before migrating.
 * **Migration Costs**
 * **Long-term Operational Expenses**
 * **Complex Pricing Models** 
 
-Note: can lead to higher overall costs. It's essential to perform a thorough cost-benefit analysis before migrating.
+
 
 ## Cloud Market Share Breakdown
 
