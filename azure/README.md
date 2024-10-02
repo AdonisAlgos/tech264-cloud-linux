@@ -22,6 +22,32 @@
   - [Details You Need for Planning a VNet:](#details-you-need-for-planning-a-vnet)
     - [CIDR Block:](#cidr-block)
     - [Subnets:](#subnets)
+  - [Plan to create a VM](#plan-to-create-a-vm)
+    - [Creating a VNet in Azure](#creating-a-vnet-in-azure-1)
+  - [Linux commands](#linux-commands)
+    - [Why is managing file ownership important?](#why-is-managing-file-ownership-important)
+    - [What is the command to view file ownership?](#what-is-the-command-to-view-file-ownership)
+    - [What permissions are set when a user creates a file or directory? Who does the file or directory belong to?](#what-permissions-are-set-when-a-user-creates-a-file-or-directory-who-does-the-file-or-directory-belong-to)
+    - [Why does the owner, by default, not receive execute permissions when they create a file?](#why-does-the-owner-by-default-not-receive-execute-permissions-when-they-create-a-file)
+    - [What command is used to change the owner of a file or directory?](#what-command-is-used-to-change-the-owner-of-a-file-or-directory)
+    - [Does being the owner of a file mean you have full permissions on that file? Explain.](#does-being-the-owner-of-a-file-mean-you-have-full-permissions-on-that-file-explain)
+    - [If you give permissions to the User entity, what does this mean?](#if-you-give-permissions-to-the-user-entity-what-does-this-mean)
+    - [If you give permissions to the Group entity, what does this mean?](#if-you-give-permissions-to-the-group-entity-what-does-this-mean)
+    - [If you give permissions to the Other entity, what does this mean?](#if-you-give-permissions-to-the-other-entity-what-does-this-mean)
+    - [You give the following permissions to a file: User permissions are read-only, Group permissions are read and write, Other permissions are read, write, and execute. You are logged in as the user who is the owner of the file. What permissions will you have on this file? Explain.](#you-give-the-following-permissions-to-a-file-user-permissions-are-read-only-group-permissions-are-read-and-write-other-permissions-are-read-write-and-execute-you-are-logged-in-as-the-user-who-is-the-owner-of-the-file-what-permissions-will-you-have-on-this-file-explain)
+    - [Here is one line from ls -l. Work out everything you can about permissions on this file or directory.](#here-is-one-line-from-ls--l-work-out-everything-you-can-about-permissions-on-this-file-or-directory)
+    - [What numeric values are assigned to each permission?](#what-numeric-values-are-assigned-to-each-permission)
+    - [What value can you assign to get read + write permissions?](#what-value-can-you-assign-to-get-read--write-permissions)
+    - [What value would assign read, write, and execute permissions?](#what-value-would-assign-read-write-and-execute-permissions)
+    - [What value would assign read and execute permissions?](#what-value-would-assign-read-and-execute-permissions)
+    - [Often, a file or directory's mode/permissions are represented by 3 numbers. What do you think 644 would mean?](#often-a-file-or-directorys-modepermissions-are-represented-by-3-numbers-what-do-you-think-644-would-mean)
+    - [What command changes file permissions?](#what-command-changes-file-permissions)
+    - [To change permissions on a file, what must the end user be? (2 answers)](#to-change-permissions-on-a-file-what-must-the-end-user-be-2-answers)
+    - [Give examples of some different ways/syntaxes to set permissions on a new file (named testfile.txt) to:](#give-examples-of-some-different-wayssyntaxes-to-set-permissions-on-a-new-file-named-testfiletxt-to)
+      - [Set User to read, Group to read + write + execute, and Other to read and write only](#set-user-to-read-group-to-read--write--execute-and-other-to-read-and-write-only)
+      - [Add execute permissions (to all entities)](#add-execute-permissions-to-all-entities)
+      - [Take write permissions away from Group](#take-write-permissions-away-from-group)
+      - [Use numeric values to give read + write access to User, read access to Group, and no access to Other](#use-numeric-values-to-give-read--write-access-to-user-read-access-to-group-and-no-access-to-other)
 
 
 ## Cloud Architecture
@@ -143,3 +169,310 @@ A Virtual Network (VNet) provides isolated networking for resources in the cloud
 
 * Divide the VNet into subnets. Each subnet gets its own CIDR block within the VNet’s range.
 * Subnets can be classified as public (with external internet access) or private (internal-only).
+
+## Plan to create a VM
+
+* Virtual network + subnet.
+* Name.
+* Location + pricing.
+* Size cpu, memory (RAM) + pricing.
+* Storage + pricing.
+* OS (concider software compatability) + pricing.
+* SSH key pair.
+
+### Creating a VNet in Azure
+
+1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
+2. Create a new Virtual Machine:
+    * Search for **"Virtual Machine"** > Click **"Create"** > Select **"Azure Virtual Machine"**.
+3. Configure the settings for the VM:
+    * Choose the resource group - `"tech264"`
+    * Provide a name for the VM - `"tech264-<name>-<title>"`
+    * Select a region - `"(Europe) UK South"`
+    * Select Availability Zone (specifiying data center) - `"No infrastructure redundancy required"`
+    * Define Security Type - `"Standard"`
+    * Choose OS image - `"Ubuntu Pro 18.04 LTS - x64 Gen2"`
+    * Select Size (cpu & memory) - `"Standard_B1s - 1 vcpu, 1 GiB memory (Price unavailable)"`
+    * Assign authentication type - `"SSH public key"`
+    * Re-assign Username - `"adminuser"`
+    * 
+    * 
+4. Complete the VNet setup:
+    * Continue through other tabs **"IP address"** to set network **CIDR block** represents range of ip addresses and similarly configure subnets.
+    * Continue through the other tabs **"Tags"** to assign key value tag to **"Owner": "Name"**
+5. Submition:
+    * Review and click **Create**.
+
+Linux free - stable - scales well - used for DevOps
+
+Clone of the unix system - unix was run on large systems but linux can be run on small systems
+
+Many types of distributions of linux
+
+Bash shell
+
+is an interpreter for linux commands
+
+## Linux commands
+
+Displays the operating system name.
+```bash
+uname
+```
+Shows all available system information.
+```bash
+uname -a
+```
+Displays the current user's username.
+```bash
+whoami
+```
+Shows the process information of the current shell.
+```bash
+ps -p $$
+```
+Lists previously entered commands in the shell.
+```bash
+history
+```
+Re-executes the command at the specified history number.
+```bash
+!<number>
+```
+Clears the entire command history.
+```bash
+history -c
+```
+Lists all files and directories, including hidden ones.
+```bash
+ls -a
+``` 
+Lists all files and directories with detailed information.
+
+```bash
+ls -al
+```
+Downloads a file from the internet and saves it as <file_name>.
+```bash
+curl <url> --output <file_name>
+```
+
+Downloads a file from the internet and saves it as `<file_name>`.
+
+```bash
+wget <url> -O <file_name>
+```
+Renames or moves a file.
+
+```bash
+mv <file_name> <new_file_name>
+```
+
+Displays the file type and related information.
+
+```bash
+file <file_name>
+```
+
+Copies a file to a new file.
+
+```bash
+cp <file_name> <new_file_name>
+```
+Removes a file.
+
+```bash
+rm <file_name>
+```
+Creates a new directory; multiple names create multiple directories.
+
+```bash
+mkdir <directory_name>
+```
+
+Does not remove directories; use rmdir instead.
+
+```bash
+rm <directory_name>
+```
+Removes an empty directory.
+
+```bash
+rmdir <directory_name>
+```
+
+Removes a directory and its contents recursively.
+
+```bash
+rm -r <directory_name>
+```
+
+
+\: Escape character; ignores the special meaning of the next character.
+touch <file_name>: Creates an empty file or updates the timestamp of an existing file.
+cat <file_name>: Displays the contents of a file.
+nano <file_name>: Opens a file for editing; creates it if it doesn't exist.
+head -<number> <file_name>: Displays the first <number> lines of a file.
+nl <file_name>: Displays a file with line numbers.
+cat <file_name> | grep <word>: Searches the file for lines containing <word> and prints them.
+sudo apt install <package_name>: Installs the specified package (requires superuser privileges).
+sudo apt update: Updates the package list.
+sudo apt install tree: Installs 'tree' to display directories in a tree-like format.
+sudo apt upgrade -y: Upgrades all installed packages to the latest versions (use with caution).
+sudo su: Switches to the superuser account (use with caution; remember to exit when done).
+
+
+### Why is managing file ownership important?
+
+Managing file ownership is essential for controlling access to files and directories, ensuring that only authorized users can read, modify, or execute them. This maintains system security and prevents unauthorized access.
+
+### What is the command to view file ownership?
+
+Use ls -l to view detailed information about files, including their ownership and permissions.
+
+### What permissions are set when a user creates a file or directory? Who does the file or directory belong to?
+
+When a user creates a file or directory, default permissions are set based on the system's umask value. Typically, a new file gets permissions like rw-r--r-- (644), and a new directory gets rwxr-xr-x (755). The file or directory belongs to the user who created it and their primary group.
+
+### Why does the owner, by default, not receive execute permissions when they create a file?
+
+Because most new files are regular data files, not executable programs, the system does not grant execute (x) permissions by default to prevent accidental execution of non-executable files.
+
+### What command is used to change the owner of a file or directory?
+
+Use the chown command to change the owner of a file or directory. For example: chown new_owner filename.
+
+### Does being the owner of a file mean you have full permissions on that file? Explain.
+
+No, being the owner of a file does not automatically grant you full permissions. Your access is determined by the user (owner) permission settings for that file. While the owner can change the file's permissions, they are still restricted to the permissions currently assigned to them.
+
+### If you give permissions to the User entity, what does this mean?
+
+Granting permissions to the User entity sets the actions that the file's owner can perform. These permissions apply exclusively to the owner and define their ability to read, write, or execute the file.
+
+### If you give permissions to the Group entity, what does this mean?
+
+Granting permissions to the Group entity defines what all users who are members of the file's group can do. These permissions apply to every user in that specific group, dictating their access levels.
+
+### If you give permissions to the Other entity, what does this mean?
+
+Granting permissions to the Other entity sets the permissions for all other users on the system who are neither the owner nor part of the file's group. These permissions determine the access rights for anyone else trying to interact with the file.
+
+### You give the following permissions to a file: User permissions are read-only, Group permissions are read and write, Other permissions are read, write, and execute. You are logged in as the user who is the owner of the file. What permissions will you have on this file? Explain.
+
+As the owner, you will have read-only permissions on the file because the user (owner) permissions are set to read-only. Even though the group and other entities have more permissions, they do not affect the owner's access. The system checks permissions in the order of user, group, then other, applying only the first applicable set.
+
+### Here is one line from ls -l. Work out everything you can about permissions on this file or directory.
+
+-rwxr-xr-- 1 tcboony staff 123 Nov 25 18:36 keeprunning.sh
+
+* File Type: - indicates it's a regular file.
+* Owner Permissions (rwx): The owner (tcboony) has read (r), write (w), and execute (x) permissions—full access.
+* Group Permissions (r-x): Users in the group staff have read (r) and execute (x) permissions but no write permission.
+* Other Permissions (r--): All other users have read-only (r) permission.
+* Link Count: 1 means there is one hard link to the file.
+* Owner: The file is owned by user tcboony.
+* Group: The file's group is staff.
+* Size: The file is 123 bytes.
+* Last Modified: The file was last modified on November 25 at 18:36.
+* Filename: The name of the file is keeprunning.sh.
+
+### What numeric values are assigned to each permission?
+
+* Read (r): 4
+* Write (w): 2
+* Execute (x): 1
+
+### What value can you assign to get read + write permissions?
+
+Add the numeric values of read and write:
+
+* Read (4) + Write (2) = 6
+
+So, the value 6 assigns read and write permissions.
+
+### What value would assign read, write, and execute permissions?
+
+Add all three permission values:
+
+* Read (4) + Write (2) + Execute (1) = 7
+
+So, the value 7 assigns read, write, and execute permissions.
+
+### What value would assign read and execute permissions?
+
+Add the numeric values of read and execute:
+
+* Read (4) + Execute (1) = 5
+
+So, the value 5 assigns read and execute permissions.
+
+### Often, a file or directory's mode/permissions are represented by 3 numbers. What do you think 644 would mean?
+
+The three numbers represent permissions for the User (owner), Group, and Others, respectively.
+
+* 6 (User): Read (4) + Write (2) = Read and Write permissions.
+* 4 (Group): Read (4) = Read-only permission.
+* 4 (Others): Read (4) = Read-only permission.
+
+Therefore, 644 means:
+
+* The owner has read and write permissions.
+* The group has read-only permission.
+* Others have read-only permission.
+
+### What command changes file permissions?
+
+The chmod command is used to change file permissions.
+
+### To change permissions on a file, what must the end user be? (2 answers)
+
+The user must either:
+
+* Be the owner of the file.
+* Have superuser (root) privileges.
+
+### Give examples of some different ways/syntaxes to set permissions on a new file (named testfile.txt) to:
+
+#### Set User to read, Group to read + write + execute, and Other to read and write only
+
+Using symbolic notation:
+
+```bash
+chmod u=r,g=rwx,o=rw testfile.txt
+```
+
+Using numeric notation:
+
+Calculate permissions:
+* User (u): read (4) = 4
+* Group (g): read (4) + write (2) + execute (1) = 7
+* Other (o): read (4) + write (2) = 6
+
+```bash
+chmod 476 testfile.txt
+```
+
+#### Add execute permissions (to all entities)
+
+```bash
+chmod a+x testfile.txt
+```
+
+#### Take write permissions away from Group
+
+```bash
+chmod g-w testfile.txt
+```
+
+#### Use numeric values to give read + write access to User, read access to Group, and no access to Other
+
+Calculate permissions:
+
+* User (u): read (4) + write (2) = 6
+* Group (g): read (4) = 4
+* Other (o): no permissions = 0
+
+```bash
+chmod 640 testfile.txt
+```

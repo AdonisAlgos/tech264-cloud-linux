@@ -158,7 +158,7 @@ As of 2023:
 * Extensive range of services.
 * Early market entry and maturity.
 * Global infrastructure.
-* Cheapest VMs.
+* Cheapest VMs out of the big 3.
 * Excellent documentation.
 
 ### Microsoft Azure
