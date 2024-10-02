@@ -34,7 +34,7 @@
 
 ## How Do We Know If Something Is in the Cloud?
 
-An application or service is considered **"in the cloud"** if it is delivered over the internet and relies on remote servers hosted in data centers managed by third-party providers.
+An application or service is considered **"in the cloud"** if it is delivered over the internet, on-demand, centrally managed and relies on remote servers hosted in data centers.
 
 ## Differences Between On-Premises and Cloud
 
@@ -55,6 +55,7 @@ An application or service is considered **"in the cloud"** if it is delivered ov
 **Characteristics**:
 * Enhanced security and control.
 * Can be on-premises or hosted externally.
+* Dedicated to an organisation - inaccessible by the public.
 
 ### 2. Public Cloud
 
@@ -66,18 +67,19 @@ An application or service is considered **"in the cloud"** if it is delivered ov
 
 ### 3. Hybrid Cloud
 
-**Definition**: Combines private and public clouds, allowing data and applications to be shared between them.
+**Definition**: Combines private/on-prem and public clouds, allowing data and applications to be shared between them.
 
 **Characteristics**:
 * Flexibility and scalability.
-* Balance between control and cost.
+* Balance between control/security and cost.
+* Some industries/organisations are regulated and need to store sensitive info on-prem.
 
 ### 4. Multi-Cloud
 
 **Definition**: Utilization of multiple cloud services from different providers.
 
 **Characteristics**:
-* Avoids vendor lock-in.
+* Avoids vendor lock-in. Back-ups to avoid redundancy and enable cloud provider switch.
 * Leverages best services from each provider.
 
 ## Types of Cloud Services
@@ -109,6 +111,7 @@ An application or service is considered **"in the cloud"** if it is delivered ov
 * **Accessibility**: Access services from anywhere with an internet connection.
 * **Disaster Recovery**: Enhanced backup and recovery options.
 * **Automatic Updates**: Providers handle maintenance and updates.
+* **Guaranteed Level of Service**: With bigger cloud providers.
 
 ### Disadvantages
 
@@ -155,6 +158,8 @@ As of 2023:
 * Extensive range of services.
 * Early market entry and maturity.
 * Global infrastructure.
+* Cheapest VMs.
+* Excellent documentation.
 
 ### Microsoft Azure
 
@@ -185,7 +190,7 @@ The best provider depends on your specific needs:
 * **Storage**: Data storage solutions.
 * **Networking**: Bandwidth, load balancers.
 * **Databases**: Managed database services.
-* **Data Transfer**: Ingress and egress charges.
+* **Data Transfer**: Ingress (not charged) and egress (traffic) charges.
 * **Security Services**: Firewalls, encryption.
 * **Management Tools**: Monitoring and analytics.
 * **Support Services**: Technical support plans.
