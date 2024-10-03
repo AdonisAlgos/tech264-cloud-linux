@@ -42,7 +42,7 @@ Microsoft Azure is a comprehensive cloud computing platform offering a wide rang
 
 **Azure Regions:** These are distinct geographic locations that house multiple data centers. Each region is a separate geographic area that ensures data residency and compliance boundaries. For example, regions include "East US," "West Europe," and "Southeast Asia."
 
-**Availability Zones:** Within each Azure region, there are multiple availability zones. These are physically separate locations within a region, each with independent power, cooling, and networking. The purpose is to provide high availability and protect applications and data from data center failures.
+**Availability Zones:** Within each Azure region, there are multiple availability zones. These are physically separate locations within a region, each with independent data center, power, cooling, and networking. The purpose is to provide high availability and protect applications and data from data center failures.
 
 ## How they work together.
 
@@ -57,6 +57,8 @@ Microsoft Azure is a comprehensive cloud computing platform offering a wide rang
 * **Resource Groups:** Logical containers within subscriptions that group related resources for an Azure solution. They simplify resource management and access control.
 
 * **Resources:** The individual services you use, such as virtual machines, storage accounts, and databases.
+
+[Organize your Azure resources effectively - Cloud Adoption Framework | Microsoft Learn](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-setup-guide/organize-resources)
 
 ## What types of services does Azure provide?
 

@@ -170,6 +170,128 @@ Switches to the superuser account (use with caution; remember to exit when done)
 sudo su
 ```
 
+## How to Write a Bash Script.
+ 
+1. use `nano provision.sh` to begin creating your `provision.sh` file, which will host the script.
+2. In the nano interface, write the following lines (be sure to write comments using `#` to help with understanding):
+   1. `#!/bin/bash`, which i called "**shebang**". This specifies which interpreter should be used to execute the script - so this tells it to use the **Bash** script.
+   2. `sudo apt update -y`
+   3. `sudo apt upgrade -y`
+   4. `sudo apt install -y nginx`
+   5. `sudo systemctl restart nginx`
+   6. `sudo systemctl enable nginx`
+3. Save the script by clicking `CTRL+S`, then exit the script by clicking `CTRL+X` to return back to your regular linux CL.
+4. Since the default **permissions** do not allow you to execute the script, use `chmod +x provision_nginx.sh` to add **execution** **permissions** to the file.
+5. Run the script using `./provision.sh`.
+
+Environment variables
+
+Environment Variable placeholder for data - value in memory available to any tool that can leverage those values
+
+How to set
+
+```bash
+export MYNAME=adonis
+```
+
+view variables
+
+```bash
+printenv
+```
+
+How to make environment variables persistent (for the same user)
+Method 1
+
+Edit .bashrc file
+
+```bash
+nano .bashrc
+```
+
+Insert the following command
+
+```bash
+export MYNAME=adonis
+```
+
+Method 2
+
+Append the command at the end of the .bashrc file
+
+```bash
+echo "export MYNAME=adonis_is_persistent" >> .bashrc
+```
+Then at each system execution the Environment Variable gets created.
+
+Processes
+
+process is a program ran in memory - processing by memory or sitting idle
+
+multicore cpus 
+single core cpus execute instructions in one process at a time
+
+Commands to list
+
+Displays processes
+
+```bash
+ps
+```
+
+Add explanation
+
+```bash
+ps -e
+
+```
+
+Add explanation
+
+```bash
+ps aux
+```
+
+Add explanation
+
+```bash
+top
+```
+
+Shift M Filters by memory
+Shift + P Filters by proccesses
+Shift + N by newsest
+
+Add explanation
+
+```bash
+jobs
+```
+
+commands to kill
+why you need to be careful with brute-force kill, what is best to try first and why
+
+system processtop
+shift N newest process
+shift M proccess using most memomry
+shift P filters by most cpu power
+
+running a process
+sleep 3 foreground to sleep for specific seconds
+sleep 5000 & runs in the background - returns process id
+
+jobs displays background processes
+jobs -l info about background proccesses
+different levels of: kill command
+
+kill -1 <process_id>: gentle
+kill <process_id>: moderate
+kill -9 <process_id>: creates zombie processes as it does not shut down child processes - brute force
+
+
+
+
+
 ## Managing file ownership.
 
 ### Why is managing file ownership important?
