@@ -27,11 +27,15 @@
     - [Creating a VNet in Azure](#creating-a-vnet-in-azure)
     - [Setting an SSH key in Azure](#setting-an-ssh-key-in-azure)
   - [Why Create a VNet?](#why-create-a-vnet)
-  - [Details You Need for Planning a VNet:](#details-you-need-for-planning-a-vnet)
-    - [CIDR Block:](#cidr-block)
-    - [Subnets:](#subnets)
-  - [Plan to create a VM](#plan-to-create-a-vm)
+  - [Details You Need for Planning a VNet and how to create one.](#details-you-need-for-planning-a-vnet-and-how-to-create-one)
+    - [Details You Need for Planning](#details-you-need-for-planning)
+      - [CIDR Block:](#cidr-block)
+        - [Subnets:](#subnets)
     - [Creating a VNet in Azure](#creating-a-vnet-in-azure-1)
+  - [Details You Need for Planning a VM and how to create one.](#details-you-need-for-planning-a-vm-and-how-to-create-one)
+    - [Details you need for Planning a VM](#details-you-need-for-planning-a-vm)
+    - [How to create a VM](#how-to-create-a-vm)
+  - [How to connect to your Azure VM through SSH](#how-to-connect-to-your-azure-vm-through-ssh)
 
 
 ## The basics of Azure
@@ -57,6 +61,8 @@ Microsoft Azure is a comprehensive cloud computing platform offering a wide rang
 * **Resource Groups:** Logical containers within subscriptions that group related resources for an Azure solution. They simplify resource management and access control.
 
 * **Resources:** The individual services you use, such as virtual machines, storage accounts, and databases.
+
+Different scopes at each level: you can set access + policies
 
 [Organize your Azure resources effectively - Cloud Adoption Framework | Microsoft Learn](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-setup-guide/organize-resources)
 
@@ -212,26 +218,18 @@ A Virtual Network (VNet) provides isolated networking for resources in the cloud
 * Enable secure communication between on-premises and cloud resources via VPN or ExpressRoute.
 * Protect sensitive workloads by keeping traffic internal.
 
-## Details You Need for Planning a VNet:
+## Details You Need for Planning a VNet and how to create one.
 
-### CIDR Block:
+### Details You Need for Planning
+
+#### CIDR Block:
 
 * Define the IP address range for the VNet, typically in CIDR notation (e.g., `10.0.0.0/16`).
 
-### Subnets:
+##### Subnets:
 
 * Divide the VNet into subnets. Each subnet gets its own CIDR block within the VNet’s range.
 * Subnets can be classified as public (with external internet access) or private (internal-only).
-
-## Plan to create a VM
-
-* Virtual network + subnet.
-* Name.
-* Location + pricing.
-* Size cpu, memory (RAM) + pricing.
-* Storage + pricing.
-* OS (concider software compatability) + pricing.
-* SSH key pair.
 
 ### Creating a VNet in Azure
 
@@ -255,4 +253,22 @@ A Virtual Network (VNet) provides isolated networking for resources in the cloud
     * Continue through the other tabs **"Tags"** to assign key value tag to **"Owner": "Name"**
 5. Submition:
     * Review and click **Create**.
+
+
+## Details You Need for Planning a VM and how to create one.
+
+### Details you need for Planning a VM
+
+* Virtual network + subnet.
+* Name.
+* Location + pricing.
+* Size cpu, memory (RAM) + pricing.
+* Storage + pricing.
+* OS (concider software compatability) + pricing.
+* SSH key pair.
+
+### How to create a VM
+
+## How to connect to your Azure VM through SSH
+
 

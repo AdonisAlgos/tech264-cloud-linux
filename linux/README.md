@@ -184,113 +184,150 @@ sudo su
 4. Since the default **permissions** do not allow you to execute the script, use `chmod +x provision_nginx.sh` to add **execution** **permissions** to the file.
 5. Run the script using `./provision.sh`.
 
-Environment variables
+## Environment Variables
 
-Environment Variable placeholder for data - value in memory available to any tool that can leverage those values
+Environment variables are placeholders for data, representing values stored in memory that can be accessed by various tools or applications.
 
-How to set
+To set an environment variable in your shell:
 
 ```bash
-export MYNAME=adonis
+export <ENV_NAME>=<value>
 ```
 
-view variables
+To list all currently set environment variables:
 
 ```bash
 printenv
 ```
 
 How to make environment variables persistent (for the same user)
-Method 1
 
-Edit .bashrc file
+To make environment variables persistent across sessions, you need to modify the user's shell configuration.
+
+* Method 1: Edit the `.bashrc` File
+
+1. Open the `.bashrc` file with a text editor:
 
 ```bash
 nano .bashrc
 ```
 
-Insert the following command
+2. Add the following line at the end of the file:
 
 ```bash
-export MYNAME=adonis
+export export <ENV_NAME>=<value>
 ```
 
-Method 2
+3. The environment variable will be automatically set each time the system starts for that user.
 
-Append the command at the end of the .bashrc file
+* Method 2: Append to `.bashrc` via Command Line
+
+1. You can append the variable directly to the .bashrc file using the echo command:
 
 ```bash
-echo "export MYNAME=adonis_is_persistent" >> .bashrc
+echo "export <ENV_NAME>=<value>" >> .bashrc
 ```
-Then at each system execution the Environment Variable gets created.
 
-Processes
+2. The environment variable will be automatically set each time the system starts for that user.
 
-process is a program ran in memory - processing by memory or sitting idle
+## Processes
 
-multicore cpus 
-single core cpus execute instructions in one process at a time
+A process is an instance of a program running in memory. It may be actively using CPU resources or sitting idle.
 
+* **Single-core CPUs** process one instruction at a time.
+* **Multi-core CPUs** can execute multiple processes simultaneously.
 Commands to list
 
-Displays processes
+### Commands to List Processes
+
+To display currently running processes:
 
 ```bash
 ps
 ```
 
-Add explanation
+To show all processes on the system:
 
 ```bash
 ps -e
 
 ```
 
-Add explanation
+To display detailed information about processes, including the user, process ID, CPU, and memory usage:
 
 ```bash
 ps aux
 ```
 
-Add explanation
+To view a dynamic, real-time list of system processes, use the top command:
 
 ```bash
 top
 ```
 
-Shift M Filters by memory
-Shift + P Filters by proccesses
-Shift + N by newsest
+In `top`, you can sort processes dynamically:
 
-Add explanation
+* `Shift + M`: Sort by memory usage.
+* `Shift + P`: Sort by CPU usage.
+* `Shift + N`: Sort by process start time (newest first).
+
+### Managing Processes in the Background
+
+To see a list of background processes:
 
 ```bash
 jobs
 ```
 
-commands to kill
-why you need to be careful with brute-force kill, what is best to try first and why
+Use jobs -l for more detailed information, including process IDs (PIDs).
 
-system processtop
-shift N newest process
-shift M proccess using most memomry
-shift P filters by most cpu power
+```bash
+jobs -l
+```
 
-running a process
-sleep 3 foreground to sleep for specific seconds
-sleep 5000 & runs in the background - returns process id
+### Running Processes
 
-jobs displays background processes
-jobs -l info about background proccesses
-different levels of: kill command
+Run a process for a set time
 
-kill -1 <process_id>: gentle
-kill <process_id>: moderate
-kill -9 <process_id>: creates zombie processes as it does not shut down child processes - brute force
+Example `sleep` command (Usage: pauses execution for <number> of seconds.)
 
+```bash
+sleep <number>
+```
 
+To run a process in the background, append an ampersand (&):
 
+```bash
+sleep 5000 &
+```
 
+### Terminating Processes
+
+Command to Kill a Process
+
+You can terminate a process using the kill command with its process ID (PID).
+
+**Gentle termination:** Sends the SIGHUP signal to restart the process.
+
+```bash
+kill -1 <process_id>
+```
+
+**Moderate termination:** Sends the SIGTERM signal, allowing the process to shut down gracefully.
+
+```bash
+kill <process_id>
+```
+
+**Forceful termination:** Sends the SIGKILL signal, which forcefully ends the process without giving it a chance to clean up. Use with caution as it can create zombie processes (child processes that remain in memory without a parent).
+
+```bash
+kill -9 <process_id>
+```
+
+### Why Brute-force Killing Can Be Risky
+
+Using `kill -9` terminates the process immediately but can leave child processes orphaned (zombie processes), which may continue running or consume resources. It's best to try a gentle or moderate kill first to allow processes to shut down properly and clean up any associated resources.
 
 ## Managing file ownership.
 
