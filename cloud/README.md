@@ -30,6 +30,9 @@
     - [2. Automation](#2-automation)
     - [3. Measurement](#3-measurement)
     - [4. Sharing](#4-sharing)
+  - [The Monolith vs 2-Tier Architecture](#the-monolith-vs-2-tier-architecture)
+    - [The Monolith](#the-monolith)
+    - [2-Tier Architecture](#2-tier-architecture)
 
 
 ## How Do We Know If Something Is in the Cloud?
@@ -218,3 +221,21 @@ The best provider depends on your specific needs:
 * **Cloud Link**: Centralized platforms facilitate sharing code and configurations.
 
 * **Integration with Cloud**: Cloud platforms provide the tools and environments that support DevOps practices, enabling faster deployment cycles and improved efficiency.
+
+## The Monolith vs 2-Tier Architecture
+
+### The Monolith
+Dissadvantages
+
+* Scalability
+* Security
+* Slow to start up
+* Code maintanance
+
+Advantages
+* Low latency
+
+### 2-Tier Architecture
+
+
+Public IP address changes on router restart.

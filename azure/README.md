@@ -31,11 +31,15 @@
     - [Details You Need for Planning](#details-you-need-for-planning)
       - [CIDR Block:](#cidr-block)
         - [Subnets:](#subnets)
-    - [Creating a VNet in Azure](#creating-a-vnet-in-azure-1)
+    - [Creating a VM in Azure](#creating-a-vm-in-azure)
   - [Details You Need for Planning a VM and how to create one.](#details-you-need-for-planning-a-vm-and-how-to-create-one)
     - [Details you need for Planning a VM](#details-you-need-for-planning-a-vm)
     - [How to create a VM](#how-to-create-a-vm)
   - [How to connect to your Azure VM through SSH](#how-to-connect-to-your-azure-vm-through-ssh)
+  - [How to delete a VM](#how-to-delete-a-vm)
+  - [Deleting Your Virtual Machine](#deleting-your-virtual-machine)
+  - [How to add a port](#how-to-add-a-port)
+  - [User Data](#user-data)
 
 
 ## The basics of Azure
@@ -231,7 +235,7 @@ A Virtual Network (VNet) provides isolated networking for resources in the cloud
 * Divide the VNet into subnets. Each subnet gets its own CIDR block within the VNet’s range.
 * Subnets can be classified as public (with external internet access) or private (internal-only).
 
-### Creating a VNet in Azure
+### Creating a VM in Azure
 
 1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
 2. Create a new Virtual Machine:
@@ -271,4 +275,34 @@ A Virtual Network (VNet) provides isolated networking for resources in the cloud
 
 ## How to connect to your Azure VM through SSH
 
+## How to delete a VM
 
+Deleting via the VM leaves elements behind like the NSG Rules always and depending if during VM configuration we checked a box that states once the VM is deleted to also delete NIC and Public IP.
+
+## Deleting Your Virtual Machine
+1. Navigate to resource group.
+2. Tick specific resources you would like to be deleted.
+   
+   *Note: Deleting the VM does not neccesseraly mean that the NIC or Disk will also be deleted.*
+
+3. Locate **delete**.
+4. Tick "Apply force delete" just to be safe.
+5. Enter "delete" in the input box and click **delete**.
+6. Select **delete** once more to confirm **deletion**.
+
+
+## How to add a port
+1. Navigate to your VM's **network settings**.
+2. Open up **Settings** and click **inbound Security Rules**.
+3. Change the **Destination Port** to `3000`.
+4. Change protocol to **TCP**.
+5. Change the priority number. The **lower** the priority number is, the **higher** the priority.
+
+Note: HTTP default port is 80.
+
+## User Data
+
+* To achieve the next level of automation.
+* Immediatelly after VM creation user data will be run.
+* User data only runs once.
+* Runs as root user - meaning when we clone our app it will be stored in thr root directory.
