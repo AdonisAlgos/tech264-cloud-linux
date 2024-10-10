@@ -914,6 +914,8 @@ Things to consider:
 
 You can find the implementation in [`updated app script`](./prov-app-script).
 
+You can find the implementation in [`updated db script`](./prov-db-script).
+
 ## Create an Image from a VM
 
 ### Create a Custom Generalized Image
