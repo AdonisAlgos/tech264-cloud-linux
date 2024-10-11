@@ -40,6 +40,8 @@
   - [Deleting Your Virtual Machine](#deleting-your-virtual-machine)
   - [How to add a port](#how-to-add-a-port)
   - [User Data](#user-data)
+- [Dashboard VM](#dashboard-vm)
+    - [Creating a VM Scale Sets](#creating-a-vm-scale-sets)
 
 
 ## The basics of Azure
@@ -290,7 +292,6 @@ Deleting via the VM leaves elements behind like the NSG Rules always and dependi
 5. Enter "delete" in the input box and click **delete**.
 6. Select **delete** once more to confirm **deletion**.
 
-
 ## How to add a port
 1. Navigate to your VM's **network settings**.
 2. Open up **Settings** and click **inbound Security Rules**.
@@ -298,7 +299,7 @@ Deleting via the VM leaves elements behind like the NSG Rules always and dependi
 4. Change protocol to **TCP**.
 5. Change the priority number. The **lower** the priority number is, the **higher** the priority.
 
-Note: HTTP default port is 80.
+*Note: HTTP default port is 80.*
 
 ## User Data
 
@@ -306,3 +307,43 @@ Note: HTTP default port is 80.
 * Immediatelly after VM creation user data will be run.
 * User data only runs once.
 * Runs as root user - meaning when we clone our app it will be stored in thr root directory.
+
+# Dashboard VM
+ 
+1. In the `VM` -> `Overview`-> scroll down to where is:
+* Properties--Monitoring--Capabilities--Recommendations--Tutorials
+2. Select `Monitoring`
+3. In the monitoring window -> `Platform metrics` -> pin the metrics that we need(e.g. CPU, Disk bytes)
+4. `Click pin`-> `create new`-> type(private/pubic) -> `Dashboard name`-> `Pin`
+
+### Creating a VM Scale Sets
+
+1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
+2. Create a new Virtual Machine:
+    * Search for **"Virtual Machine Scale Sets"** > Click **"Create"**
+3. Configure the VM Scale Set:
+   *   Select Resource Group: **"tech264"**
+   *   Add Virtual machine scale set name: **"tech264-adonis-sparta-app-scale-set"**
+   *   Availability zone: **"1,2 & 3"**
+   *   Orchestration mode: **"Uniform: optimized for large scale stateless workloads"**
+   *   Security: **"Standard"**
+   *   Scaling mode: **"Autoscaling: Scaling based on a CPU metric, on any schedule."**
+   *   Scaling configuration: **"Configure"** > **"Scaling Conditions"** > **"Edit"** > *Cofigured maximum instance limit:2 and Scale out CPU threshold 75* > **"Save"** > **"Save"**.
+   *   Image: **"See All"** > **"My Images"** > **"tech264-adonis-ready-to-run-app-image"**.
+   *   Username: **"adminuser"**.
+   *   SSH public **"key source: Use existing key in Azure"**.
+   *   Stored Keys: **"tech264-adonis-az-key"**.
+   *   License type: **"Other"**.
+   *   OS disk type: **"Standard SSD"**.
+   *   Virtual network: **"tech264-adonis-subnet-vnet"**.
+   *   Network interface: **"Edit"** > **"Public inbound ports"** > **"Allow selected ports"**.
+   *   Select inbound ports: **"SSH & HTTP"**.
+   *   Load balancing options: **"Azure load balancer"**.
+   *   Select Load Balancer: Create a load balancer > Load balancer name: **"tech264-adonis-sparta-app-lb"** > Create
+   *   Health > **Tick**: Enable application health monitoring.
+   *   Health > **Tick**: Automatic repairs
+   *   Advanced > **Tick**: Enable user data
+       *   Add script You can find the implementation in [`userdata app script - no db connection`](../linux/userdata-app-nodbconnection-script.sh).
+   *   Tags > Name: **"Owner"**, Value: **"Adonis"**
+4. Review + Create > Create
+

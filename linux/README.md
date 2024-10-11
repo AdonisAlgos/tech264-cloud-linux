@@ -58,6 +58,7 @@
     - [Create a Custom Generalized Image](#create-a-custom-generalized-image)
     - [Creating a New VM from the image](#creating-a-new-vm-from-the-image)
     - [Summary of our Sparta App](#summary-of-our-sparta-app)
+  - [Load testing with Apache Bench](#load-testing-with-apache-bench)
 
 ## Introduction to Linux
 
@@ -1021,3 +1022,17 @@ Create a New VM Using the Custom Image:
 
 You can find the implementation in [`userdata app script`](./userdata-app-script.sh).
 
+## Load testing with Apache Bench
+
+Install Apache Bench
+
+```bash
+sudo apt-get install apache2-utils
+```
+
+
+Load test the website
+ 
+```bash
+ab -n 1000 -c 100 http://yourwebsite.com/
+```
