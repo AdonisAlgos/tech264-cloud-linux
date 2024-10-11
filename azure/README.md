@@ -40,8 +40,8 @@
   - [Deleting Your Virtual Machine](#deleting-your-virtual-machine)
   - [How to add a port](#how-to-add-a-port)
   - [User Data](#user-data)
-- [Dashboard VM](#dashboard-vm)
-    - [Creating a VM Scale Sets](#creating-a-vm-scale-sets)
+  - [Dashboard VM](#dashboard-vm)
+  - [Creating a VM Scale Sets](#creating-a-vm-scale-sets)
 
 
 ## The basics of Azure
@@ -308,7 +308,7 @@ Deleting via the VM leaves elements behind like the NSG Rules always and dependi
 * User data only runs once.
 * Runs as root user - meaning when we clone our app it will be stored in thr root directory.
 
-# Dashboard VM
+## Dashboard VM
  
 1. In the `VM` -> `Overview`-> scroll down to where is:
 * Properties--Monitoring--Capabilities--Recommendations--Tutorials
@@ -316,7 +316,7 @@ Deleting via the VM leaves elements behind like the NSG Rules always and dependi
 3. In the monitoring window -> `Platform metrics` -> pin the metrics that we need(e.g. CPU, Disk bytes)
 4. `Click pin`-> `create new`-> type(private/pubic) -> `Dashboard name`-> `Pin`
 
-### Creating a VM Scale Sets
+## Creating a VM Scale Sets
 
 1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
 2. Create a new Virtual Machine:
