@@ -22,26 +22,35 @@
     - [Network Interface Controller (NIC)](#network-interface-controller-nic)
     - [Virtual Machine (VM)](#virtual-machine-vm)
     - [Network Security Group (NSG)](#network-security-group-nsg)
-  - [Steps to Create an SSH Key Pair on a Local Machine and Put the Public Key on Azure](#steps-to-create-an-ssh-key-pair-on-a-local-machine-and-put-the-public-key-on-azure)
+  - [SSH creation and Azure integration](#ssh-creation-and-azure-integration)
     - [Creating a New SSH Key Pair on a Local Machine](#creating-a-new-ssh-key-pair-on-a-local-machine)
-    - [Creating a VNet in Azure](#creating-a-vnet-in-azure)
     - [Setting an SSH key in Azure](#setting-an-ssh-key-in-azure)
-  - [Why Create a VNet?](#why-create-a-vnet)
-  - [Details You Need for Planning a VNet and how to create one.](#details-you-need-for-planning-a-vnet-and-how-to-create-one)
-    - [Details You Need for Planning](#details-you-need-for-planning)
-      - [CIDR Block:](#cidr-block)
-        - [Subnets:](#subnets)
-    - [Creating a VM in Azure](#creating-a-vm-in-azure)
-  - [Details You Need for Planning a VM and how to create one.](#details-you-need-for-planning-a-vm-and-how-to-create-one)
+  - [Azure Virtual Networks (VNet's).](#azure-virtual-networks-vnets)
+    - [Why Create a VNet?](#why-create-a-vnet)
+    - [Creating a VNet in Azure](#creating-a-vnet-in-azure)
+    - [Planning VNet](#planning-vnet)
+  - [Azure Virtual Machines (VM's).](#azure-virtual-machines-vms)
     - [Details you need for Planning a VM](#details-you-need-for-planning-a-vm)
-    - [How to create a VM](#how-to-create-a-vm)
-  - [How to connect to your Azure VM through SSH](#how-to-connect-to-your-azure-vm-through-ssh)
-  - [How to delete a VM](#how-to-delete-a-vm)
-  - [Deleting Your Virtual Machine](#deleting-your-virtual-machine)
-  - [How to add a port](#how-to-add-a-port)
-  - [User Data](#user-data)
-  - [Dashboard VM](#dashboard-vm)
-  - [Creating a VM Scale Sets](#creating-a-vm-scale-sets)
+    - [Creating a VM in Azure](#creating-a-vm-in-azure)
+    - [How to connect to your Azure VM through SSH](#how-to-connect-to-your-azure-vm-through-ssh)
+    - [How to delete a VM](#how-to-delete-a-vm)
+    - [Deleting Your Virtual Machine](#deleting-your-virtual-machine)
+    - [How to enable an inbound or outbound port.](#how-to-enable-an-inbound-or-outbound-port)
+    - [User Data](#user-data)
+  - [Azure VM Scale Sets](#azure-vm-scale-sets)
+    - [Creating a VM Scale Sets](#creating-a-vm-scale-sets)
+    - [VM Scale Set Diagram](#vm-scale-set-diagram)
+  - [Azure Alert Management \& Monitoring](#azure-alert-management--monitoring)
+    - [What is worst to best in terms of monitoring and responding to load/traffic.](#what-is-worst-to-best-in-terms-of-monitoring-and-responding-to-loadtraffic)
+    - [How you setup a dashboard](#how-you-setup-a-dashboard)
+    - [How a combination of load testing and the dashboard helped us.](#how-a-combination-of-load-testing-and-the-dashboard-helped-us)
+    - [Load testing with Apache Bench](#load-testing-with-apache-bench)
+    - [Creating a CPU usage alert (you should get a notification sent your email).](#creating-a-cpu-usage-alert-you-should-get-a-notification-sent-your-email)
+- [CPU Usage Alert Setup (alert to check the average for each minute)](#cpu-usage-alert-setup-alert-to-check-the-average-for-each-minute)
+  - [2 - Tier Architecture with increased security measures.](#2---tier-architecture-with-increased-security-measures)
+  - [Route Tables](#route-tables)
+    - [--\> Review and Create](#---review-and-create)
+    - [--\> Once it's created, navigate to the resource.](#---once-its-created-navigate-to-the-resource)
 
 
 ## The basics of Azure
@@ -153,10 +162,10 @@ A **Virtual Machine (VM)** is a scalable compute resource that runs on virtualiz
 ### Network Security Group (NSG)
 A **Network Security Group (NSG)** is a set of security rules that control inbound and outbound network traffic to resources in a Virtual Network (VNet), such as Virtual Machines (VMs) and subnets. NSGs help secure cloud environments by allowing or denying traffic based on various criteria.
 
-[cloud architecture](../images/cloud-architecture.png "Cloud Architecture")
+![azure cloud architecture](../images/cloud-architecture.png "Cloud Architecture")
 
 
-## Steps to Create an SSH Key Pair on a Local Machine and Put the Public Key on Azure
+## SSH creation and Azure integration
 
 ### Creating a New SSH Key Pair on a Local Machine
 
@@ -184,6 +193,31 @@ A **Network Security Group (NSG)** is a set of security rules that control inbou
 cat ~/.ssh/mykey.pub
 ```
 
+### Setting an SSH key in Azure
+1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
+2. Create a new SSH key:
+    * Search for **"SSH keys"** > Click **"Create"**.
+3. Configure the basic settings for the VNet:
+    * Choose the resource group.
+    * Provide a name for the SSH key.
+    * Select **"Upload existing public key"**
+    * Paste the **public** SSH key from your local device. File should end with the `.pub` extension. 
+4. Complete SSH key setup:
+    * Continue through the other tabs **"Tags"** to assign key value tag to **"Owner": "Name"**
+5. Submition:
+    * Review and click **Create**.
+
+## Azure Virtual Networks (VNet's).
+
+### Why Create a VNet?
+
+A Virtual Network (VNet) provides isolated networking for resources in the cloud. VNets allow you to:
+
+* Segment resources using subnets (private or public).
+* Control traffic flow with Network Security Groups (NSGs).
+* Enable secure communication between on-premises and cloud resources via VPN or ExpressRoute.
+* Protect sensitive workloads by keeping traffic internal.
+
 ### Creating a VNet in Azure
 
 1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
@@ -199,69 +233,18 @@ cat ~/.ssh/mykey.pub
 5. Submition:
     * Review and click **Create**.
 
-### Setting an SSH key in Azure
-1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
-2. Create a new SSH key:
-    * Search for **"SSH keys"** > Click **"Create"**.
-3. Configure the basic settings for the VNet:
-    * Choose the resource group.
-    * Provide a name for the SSH key.
-    * Select **"Upload existing public key"**
-    * Paste the **public** SSH key from your local device. File should end with the `.pub` extension. 
-4. Complete SSH key setup:
-    * Continue through the other tabs **"Tags"** to assign key value tag to **"Owner": "Name"**
-5. Submition:
-    * Review and click **Create**.
+### Planning VNet
 
-Planning/Creating a VNet
-
-## Why Create a VNet?
-
-A Virtual Network (VNet) provides isolated networking for resources in the cloud. VNets allow you to:
-
-* Segment resources using subnets (private or public).
-* Control traffic flow with Network Security Groups (NSGs).
-* Enable secure communication between on-premises and cloud resources via VPN or ExpressRoute.
-* Protect sensitive workloads by keeping traffic internal.
-
-## Details You Need for Planning a VNet and how to create one.
-
-### Details You Need for Planning
-
-#### CIDR Block:
+**CIDR Block:**
 
 * Define the IP address range for the VNet, typically in CIDR notation (e.g., `10.0.0.0/16`).
 
-##### Subnets:
+**Subnets:**
 
 * Divide the VNet into subnets. Each subnet gets its own CIDR block within the VNet’s range.
 * Subnets can be classified as public (with external internet access) or private (internal-only).
 
-### Creating a VM in Azure
-
-1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
-2. Create a new Virtual Machine:
-    * Search for **"Virtual Machine"** > Click **"Create"** > Select **"Azure Virtual Machine"**.
-3. Configure the settings for the VM:
-    * Choose the resource group - `"tech264"`
-    * Provide a name for the VM - `"tech264-<name>-<title>"`
-    * Select a region - `"(Europe) UK South"`
-    * Select Availability Zone (specifiying data center) - `"No infrastructure redundancy required"`
-    * Define Security Type - `"Standard"`
-    * Choose OS image - `"Ubuntu Pro 18.04 LTS - x64 Gen2"`
-    * Select Size (cpu & memory) - `"Standard_B1s - 1 vcpu, 1 GiB memory (Price unavailable)"`
-    * Assign authentication type - `"SSH public key"`
-    * Re-assign Username - `"adminuser"`
-    * 
-    * 
-4. Complete the VNet setup:
-    * Continue through other tabs **"IP address"** to set network **CIDR block** represents range of ip addresses and similarly configure subnets.
-    * Continue through the other tabs **"Tags"** to assign key value tag to **"Owner": "Name"**
-5. Submition:
-    * Review and click **Create**.
-
-
-## Details You Need for Planning a VM and how to create one.
+## Azure Virtual Machines (VM's).
 
 ### Details you need for Planning a VM
 
@@ -273,26 +256,40 @@ A Virtual Network (VNet) provides isolated networking for resources in the cloud
 * OS (concider software compatability) + pricing.
 * SSH key pair.
 
-### How to create a VM
+### Creating a VM in Azure
 
-## How to connect to your Azure VM through SSH
+1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
+2. Create a new Virtual Machine:
+    * Search for **"Virtual Machine"** > Click **Create** > Select **Azure Virtual Machine**.
+3. Configure the settings for the VM:
+    * Choose the resource group - `"tech264"`
+    * Provide a name for the VM - `"tech264-<name>-<title>"`
+    * Select a region - `"(Europe) UK South"`
+    * Select Availability Zone (specifiying data center) - `"No infrastructure redundancy required"`
+    * Define Security Type - `"Standard"`
+    * Choose OS image - `"Ubuntu Pro 18.04 LTS - x64 Gen2"`
+    * Select Size (cpu & memory) - `"Standard_B1s - 1 vcpu, 1 GiB memory (Price unavailable)"`
+    * Assign authentication type - `"SSH public key"`
+    * Re-assign Username - `"adminuser"`
+    * Continue through the other tabs **"Tags"** to assign key value tag to **"Owner": "Name"**
+4. Submition:
+    * Review and click **Create**.
 
-## How to delete a VM
+### How to connect to your Azure VM through SSH
 
-Deleting via the VM leaves elements behind like the NSG Rules always and depending if during VM configuration we checked a box that states once the VM is deleted to also delete NIC and Public IP.
+### How to delete a VM
 
-## Deleting Your Virtual Machine
+*Note: Deleting via the VM leaves elements behind like the NSG Rules always and depending if during VM configuration we checked a box that states once the VM is deleted to also delete NIC and Public IP.*
+
+### Deleting Your Virtual Machine
 1. Navigate to resource group.
 2. Tick specific resources you would like to be deleted.
-   
-   *Note: Deleting the VM does not neccesseraly mean that the NIC or Disk will also be deleted.*
-
 3. Locate **delete**.
 4. Tick "Apply force delete" just to be safe.
 5. Enter "delete" in the input box and click **delete**.
 6. Select **delete** once more to confirm **deletion**.
 
-## How to add a port
+### How to enable an inbound or outbound port.
 1. Navigate to your VM's **network settings**.
 2. Open up **Settings** and click **inbound Security Rules**.
 3. Change the **Destination Port** to `3000`.
@@ -301,22 +298,16 @@ Deleting via the VM leaves elements behind like the NSG Rules always and dependi
 
 *Note: HTTP default port is 80.*
 
-## User Data
+### User Data
 
 * To achieve the next level of automation.
 * Immediatelly after VM creation user data will be run.
 * User data only runs once.
 * Runs as root user - meaning when we clone our app it will be stored in thr root directory.
 
-## Dashboard VM
- 
-1. In the `VM` -> `Overview`-> scroll down to where is:
-* Properties--Monitoring--Capabilities--Recommendations--Tutorials
-2. Select `Monitoring`
-3. In the monitoring window -> `Platform metrics` -> pin the metrics that we need(e.g. CPU, Disk bytes)
-4. `Click pin`-> `create new`-> type(private/pubic) -> `Dashboard name`-> `Pin`
+## Azure VM Scale Sets
 
-## Creating a VM Scale Sets
+### Creating a VM Scale Sets
 
 1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
 2. Create a new Virtual Machine:
@@ -346,4 +337,109 @@ Deleting via the VM leaves elements behind like the NSG Rules always and dependi
        *   Add script You can find the implementation in [`userdata app script - no db connection`](../linux/userdata-app-nodbconnection-script.sh).
    *   Tags > Name: **"Owner"**, Value: **"Adonis"**
 4. Review + Create > Create
+
+### VM Scale Set Diagram
+
+**Custom Image Process:** This section of the diagram represents the process of creating a custom image from scratch.
+
+1. Accessing the default Virtual Hard Disk File (normally found within the official pages of an OS provider).
+2. Downloading it and storing it as Blob Storage.
+3. From that file a custom image can be created (Original proceedure of creating images within the Marketplace)
+
+**Not Done**
+
+![Scale Set Architecture](../images/Scale%20Sets.png)
+
+## Azure Alert Management & Monitoring
+
+### What is worst to best in terms of monitoring and responding to load/traffic.
+
+![Scale Set Architecture](../images/monitoring-alert-setups.png)
+
+
+### How you setup a dashboard
+
+1. Navigate to the **Overview** page of a VM, scroll down and select **Monitoring**
+2. In the **Monitoring** window select **see all Platform Metrics**
+3. Pin the metrics to be included within the Dashboard (e.g. CPU, Disk bytes).
+4. After clicking pin you are prompted with selecting a Dashboard through the **Existing** tab or creating a new one through the **Create new** tab.
+5. Repeat for each metric.
+6. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
+7. Search for **Dashboards** and select the created Dashboard.
+8. Within your Dashboard overview, you can have a display of the metrics selected and furtherly configure the metrics themselves along with the Dashboard layout.
+
+### How a combination of load testing and the dashboard helped us.
+
+Combining load testing with Azure Dashboards helps identify performance bottlenecks, validate scaling strategies. Dashboards provide centralized, real-time insights and historical tracking, allowing teams to visualize system behavior under stress, optimize resource allocation, and set up alerts for critical thresholds.
+
+### Load testing with Apache Bench
+
+The `sudo apt-get install apache2-utils` command installs the `apache2-utils package`, which includes useful tools for managing and testing Apache HTTP servers.
+
+```bash
+sudo apt-get install apache2-utils
+```
+
+`AB(Apache Benchmark)` - a command-line tool used for benchmarking and load-testing web servers by sending a specified number of requests to a given URL.
+
+```bash
+ab
+```
+Example implementation
+ 
+```bash
+# ab -n 1000 -c 100 http://public ip address/
+# to increase the requests : ab -n 1000 -c 200...
+
+ab -n 1000 -c 100 http://yourwebsite.com/
+```
+
+*Include a screenshot of your dashboard when you manage to get it to stop responding through extreme load testing*
+
+**Not Done**
+
+
+### Creating a CPU usage alert (you should get a notification sent your email).
+
+# CPU Usage Alert Setup (alert to check the average for each minute)
+ 
+1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
+2. Search for **Monitor** and navigate to the **Alerts** tab.
+3. Click on **Create** > **Alert Rule**.
+4. Within the **Scope** tab set the alert coverourage - (e.g., virtual machine or app service).
+5. Under the **Condition** tab, define the **Signal name** as > **Percentage CPU** as the signal.
+6. Set the **Alert logic** configurations:
+   * **Aggregation type** set to **Average**.
+   * Set the threshold (e.g., 70%) to trigger an alert under heavy load.
+   * Under the **When to evaluate** set bot time indicators to 1 minute.
+7. Under the **Actions** tab, set the **Select actions** setting to **Use quick action** and configure the pop-window by defining the method of alert (eg. Email - sends notification to your address).
+8. Set the tags under the **Tag** tab and **Review + create**.
+
+*Include a screenshot of the email you received as a notification*
+
+![Scale Set Architecture](../images/alert-monitoring-email.png)
+
+## 2 - Tier Architecture with increased security measures.
+
+We create a VNet with 3 subnets following the same process described within the VNet Creation section.
+
+*Note: As we intent to make this setup more secure we add a further configuration for the private subnet by enabling the no outbound access - this mean whatever is in the subnet cannot access the internet*.
+
+![2-Tier Architecture with 3 subnets - Increased security](../images/2-tier-architecture-increased-security.png)
+
+## Route Tables
+ 
+1. Select **tech264** resource group.
+2. For **Region**, Select **UK South**.
+ 
+### --> Review and Create
+1. **Ensure** you've selected the correct options. There isn't really much here, really.
+2. **Create** your shiny new Route table.
+ 
+### --> Once it's created, navigate to the resource.
+ 
+3. Go to the **Settings** drop down.
+4. Click **Routes**.
+5. Click **Add**.
+ 
 
