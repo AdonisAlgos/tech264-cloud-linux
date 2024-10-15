@@ -46,7 +46,6 @@
     - [How a combination of load testing and the dashboard helped us.](#how-a-combination-of-load-testing-and-the-dashboard-helped-us)
     - [Load testing with Apache Bench](#load-testing-with-apache-bench)
     - [Creating a CPU usage alert (you should get a notification sent your email).](#creating-a-cpu-usage-alert-you-should-get-a-notification-sent-your-email)
-- [CPU Usage Alert Setup (alert to check the average for each minute)](#cpu-usage-alert-setup-alert-to-check-the-average-for-each-minute)
   - [2 - Tier Architecture with increased security measures.](#2---tier-architecture-with-increased-security-measures)
   - [Route Tables](#route-tables)
     - [--\> Review and Create](#---review-and-create)
@@ -400,8 +399,6 @@ ab -n 1000 -c 100 http://yourwebsite.com/
 
 
 ### Creating a CPU usage alert (you should get a notification sent your email).
-
-# CPU Usage Alert Setup (alert to check the average for each minute)
  
 1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
 2. Search for **Monitor** and navigate to the **Alerts** tab.
