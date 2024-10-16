@@ -43,13 +43,34 @@
   - [Azure Alert Management \& Monitoring](#azure-alert-management--monitoring)
     - [What is worst to best in terms of monitoring and responding to load/traffic.](#what-is-worst-to-best-in-terms-of-monitoring-and-responding-to-loadtraffic)
     - [How you setup a dashboard](#how-you-setup-a-dashboard)
+    - [Deleting your Dashboard](#deleting-your-dashboard)
     - [How a combination of load testing and the dashboard helped us.](#how-a-combination-of-load-testing-and-the-dashboard-helped-us)
     - [Load testing with Apache Bench](#load-testing-with-apache-bench)
     - [Creating a CPU usage alert (you should get a notification sent your email).](#creating-a-cpu-usage-alert-you-should-get-a-notification-sent-your-email)
+    - [Deleting your Alerts](#deleting-your-alerts)
+    - [Deleting your Action Groups](#deleting-your-action-groups)
   - [2 - Tier Architecture with increased security measures.](#2---tier-architecture-with-increased-security-measures)
-  - [Route Tables](#route-tables)
-    - [--\> Review and Create](#---review-and-create)
-    - [--\> Once it's created, navigate to the resource.](#---once-its-created-navigate-to-the-resource)
+    - [Components to implement the approach](#components-to-implement-the-approach)
+    - [Creating the VNet for the secure 2-tier architecture](#creating-the-vnet-for-the-secure-2-tier-architecture)
+    - [Creating the VMs for the secure 2-tier architecture](#creating-the-vms-for-the-secure-2-tier-architecture)
+    - [Creating Route Tables](#creating-route-tables)
+    - [Configuring port forwarding](#configuring-port-forwarding)
+    - [Configuring port access in DB VM.](#configuring-port-access-in-db-vm)
+    - [Task: Work out how to get the /posts page working again in the 3-subnet architecture after stoping and starting all 3 VM's](#task-work-out-how-to-get-the-posts-page-working-again-in-the-3-subnet-architecture-after-stoping-and-starting-all-3-vms)
+  - [Task: Research VM availability options on Azure](#task-research-vm-availability-options-on-azure)
+    - [What is an Availability Set?](#what-is-an-availability-set)
+      - [How does it work?](#how-does-it-work)
+      - [Advantages:](#advantages)
+      - [Disadvantages:](#disadvantages)
+    - [What is an Availability Zone? Why superior to an Availability Set? Disadvantages?](#what-is-an-availability-zone-why-superior-to-an-availability-set-disadvantages)
+      - [What is an Availability Zone?](#what-is-an-availability-zone)
+      - [Why is it superior to an Availability Set?](#why-is-it-superior-to-an-availability-set)
+      - [Disadvantages:](#disadvantages-1)
+    - [What is a Virtual Machine Scale Set? What type of scaling does it do? How does it work? Limitations?](#what-is-a-virtual-machine-scale-set-what-type-of-scaling-does-it-do-how-does-it-work-limitations)
+      - [What is a Virtual Machine Scale Set?](#what-is-a-virtual-machine-scale-set)
+      - [What type of scaling does it do?](#what-type-of-scaling-does-it-do)
+      - [How does it work?](#how-does-it-work-1)
+      - [Limitations:](#limitations)
 
 
 ## The basics of Azure
@@ -345,8 +366,6 @@ A Virtual Network (VNet) provides isolated networking for resources in the cloud
 2. Downloading it and storing it as Blob Storage.
 3. From that file a custom image can be created (Original proceedure of creating images within the Marketplace)
 
-**Not Done**
-
 ![Scale Set Architecture](../images/Scale%20Sets.png)
 
 ## Azure Alert Management & Monitoring
@@ -354,7 +373,6 @@ A Virtual Network (VNet) provides isolated networking for resources in the cloud
 ### What is worst to best in terms of monitoring and responding to load/traffic.
 
 ![Scale Set Architecture](../images/monitoring-alert-setups.png)
-
 
 ### How you setup a dashboard
 
@@ -366,6 +384,10 @@ A Virtual Network (VNet) provides isolated networking for resources in the cloud
 6. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
 7. Search for **Dashboards** and select the created Dashboard.
 8. Within your Dashboard overview, you can have a display of the metrics selected and furtherly configure the metrics themselves along with the Dashboard layout.
+
+### Deleting your Dashboard
+
+**To be completed**
 
 ### How a combination of load testing and the dashboard helped us.
 
@@ -384,6 +406,7 @@ sudo apt-get install apache2-utils
 ```bash
 ab
 ```
+
 Example implementation
  
 ```bash
@@ -392,11 +415,6 @@ Example implementation
 
 ab -n 1000 -c 100 http://yourwebsite.com/
 ```
-
-*Include a screenshot of your dashboard when you manage to get it to stop responding through extreme load testing*
-
-**Not Done**
-
 
 ### Creating a CPU usage alert (you should get a notification sent your email).
  
@@ -416,27 +434,343 @@ ab -n 1000 -c 100 http://yourwebsite.com/
 
 ![Scale Set Architecture](../images/alert-monitoring-email.png)
 
+### Deleting your Alerts
+
+**To be completed**
+
+### Deleting your Action Groups
+
+**To be completed**
+
 ## 2 - Tier Architecture with increased security measures.
 
-We create a VNet with 3 subnets following the same process described within the VNet Creation section.
+### Components to implement the approach
 
-*Note: As we intent to make this setup more secure we add a further configuration for the private subnet by enabling the no outbound access - this mean whatever is in the subnet cannot access the internet*.
+A VNet with 3 subnets:
+* **Public Subnet**: Which will host our applications and interract with web traffic (user entry point).
+* **DMZ Subnet**: Acts as an intermediary between the public and private subnets containing firewalls/NVA to monitor/filter traffic that is communicated between Application and Database.
+* **Private Subnet**: Secure subnet with no direct public access.
+
+Router Table:
+* Directs network traffic within and between VNets by defining custom routing rules. It allows precise control over traffic flow, enforces security by routing through firewalls or NVAs.
+
+### Creating the VNet for the secure 2-tier architecture
+
+1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
+2. Search for **Virtual Networks** and click **Create**.
+3. Fill the **Basics** information:
+   * Resource group: **tech264**.
+   * Virtual network name: **tech264-adonis-3-subnet-vnet**.
+   * Region: **(Europe) UK South**.
+4. Configure the subnets in the **IP adresses** tab:
+   * Edit the default subnet:
+     * Change the **Name** to **"public-subnet"**.
+     * Modify the **Starting address** to **"10.0.2.0"**.
+     * Click **Save**.
+   * Click Add a subnet and enter the following details:
+     * Change the **Name** to **"dmz-subnet"**.
+     * Modify the **Starting address** to **"10.0.3.0"**.
+     * Click **Save**.
+   * Click Add a subnet and enter the following details:
+     * Change the **Name** to **"private-subnet"**.
+     * Modify the **Starting address** to **"10.0.4.0"**.
+     * Scroll down to **Private subnet** and tick **Enable private subnet (no default outbound access)**.
+     * Click **Save**.
+
+*Note: As we intent to make this setup more secure, by enabling the no outbound access means anything within the subnet cannot access the internet*.
+
+5. Add Tags: **"Owner"** -> **"Adonis"**
+6. Click **Review + create**.
+
+### Creating the VMs for the secure 2-tier architecture
+
+**Database VM**
+
+1. We navigate to the **Overview** page of our predifined db image - `tech264-adonis-ready-to-run-db-image` and click **Create VM**.
+2. Fill the **Basic** tab info:
+   * Resource group: Select **tech264**.
+   * Virtual Machine Name: **"tech264-adonis-3-subnet-db-vm"**.
+   * Set the **Availability zone** to **Zone 3**.
+   * Ensure the image is correct.
+   * Define the **Username** as **"adminuser"**.
+   * Enable **SHH** as an inboud port.
+   * For **Licence** select **Other**.
+3. In the Disks tab select **Standard SSD**.
+4. For **Networking** select the correct VNet and **private-subnet** and to add another layer of security remove the **Public IP** by setting it to **None**.
+5. Add Tags: **"Owner"** -> **"Adonis"**
+6. Click **Review + create**.
+
+**NVA VM**
+
+1. We navigate to the **Overview** page of our predifined custom image - `ramon-official-ubuntu2204-clean-image` and click **Create VM**.
+2. Fill the **Basic** tab info:
+   * Resource group: Select **tech264**.
+   * Virtual Machine Name: **"tech264-adonis-3-subnet-nva-vm"**.
+   * Set the **Availability zone** to **Zone 2**.
+   * Ensure the image is correct.
+   * Define the **Username** as **"adminuser"**.
+   * Enable **SHH** as an inboud port.
+   * For **Licence** select **Other**.
+3. In the Disks tab select **Standard SSD**.
+4. For **Networking** select the correct VNet and **dmz-subnet**.
+5. Add Tags: **"Owner"** -> **"Adonis"**.
+6. Click **Review + create**.
+
+**App VM**
+
+1. We navigate to the **Overview** page of our predifined custom image - `tech264-adonis-ready-to-run-app-image` and click **Create VM**.
+2. Fill the **Basic** tab info:
+   * Resource group: Select **tech264**.
+   * Virtual Machine Name: **"tech264-adonis-3-subnet-app-vm"**.
+   * Set the **Availability zone** to **Zone 1**.
+   * Ensure the image is correct.
+   * Define the **Username** as **"adminuser"**.
+   * Enable **SHH** and **HTTP** as an inboud port.
+   * For **Licence** select **Other**.
+3. In the Disks tab select **Standard SSD**.
+4. For **Networking** select the correct VNet and **public-subnet**.
+5. In the **Advanced** tab we **Enable user data**, and add the script to make the database connection and run the application. [user data script for db connection and application execution](../linux/userdata-app-script.sh)
+6. Add Tags: **"Owner"** -> **"Adonis"**.
+7. Click **Review + create**.
 
 ![2-Tier Architecture with 3 subnets - Increased security](../images/2-tier-architecture-increased-security.png)
 
-## Route Tables
+### Creating Route Tables
+
+1. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
+2. Search for **Router Table** and click **Create**.
+3. Define the **Basics** tab:
+   * Select **tech264** resource group.
+   * For **Region**, Select **UK South**.
+   * Name: **"tech264-adonis-3-subnet-rt"**
+4. **Review + create**
  
-1. Select **tech264** resource group.
-2. For **Region**, Select **UK South**.
+Once it's created, navigate to the resource.
  
-### --> Review and Create
-1. **Ensure** you've selected the correct options. There isn't really much here, really.
-2. **Create** your shiny new Route table.
+1. Go to the **Settings** drop down.
+2. Click **Routes**.
+3. Click **Add**.
+4. For the **route name**, input `to-private-subnet-route`.
+5. For the **destination type**, select **IP addresses**.
+6. For **Destination IP addresses/CIDR ranges**, we use the private subnet: `10.0.4.0/24`.
+7. For the next **hop type**, select **Virtual appliance**.
+8. For the next **hop address** input the **private IP** of the NVA: `10.0.3.4`.
+9. Select **Add**.
+
+Now we need to associate the route table to where the traffic comes out of.
+
+1. Under **Settings** > **Subnets** click **Associate**
+2. Within the pop-up window choose the **VNet** **"tech264-adonis-3-subnet-vnet"** and relevant subnet where the traffic is comming out of **public-subnet**.
+3. Click **OK**.
+
+*Note: You can dissasociate subnets form the route to disable it*
+
+### Configuring port forwarding
+
+**Azure port forwarding setup**
+
+1. Navigate to the **NIC** page for the **NVA VM**.
+2. Access **Settings** > **IP configurations** and Enable IP forwarding.
+
+**NVA VM port forwarding setup**
+
+1. SSH in NVA VM
+2. Run the update & upgrade commands
+3. The `sysctl net.ipv4.ip_forward` command will return a boolean value to define whether IP forwardin is enabled -> True or False (1 or 0).
+4. We enter to the configuration file to toggle port forwarding.
+```bash
+sudo nano /etc/sysctl.conf
+# need to uncomment the net.ipv4.ip_forward=1
+```
+5. Reload the file to apply changes.
+```bash
+sudo sysctl -p
+#(reload the configuration)
+```
+
+We need a script that will contain the rules we're going to set. SSH into your NVA.
+
+1. Update the source packages.
+```bash
+sudo apt update -y
+# update
+```
+2. Upgrade the installed packages.
+```bash
+sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
+# upgrade
+```
+3. Create script file.
+```bash
+nano config-ip-tables.sh
+# create the script
+```
+
+[ip configuration table](../linux/ip-configuration-script.sh)
  
-### --> Once it's created, navigate to the resource.
+4. Add permissions to run the script.
+```bash
+chmod +x config-ip-tables.sh
+# give permission
+```
+.
+5. Run the script.
+```bash
+./config-ip-tables.sh
+# run the script
+```
+
+**Loopback Interface** (`-i lo -j ACCEPT / -o lo -j ACCEPT`):
+
+Allows traffic on the loopback (localhost) interface, used for internal communication within the system itself.
+
+**State Matching** (`--state ESTABLISHED,RELATED`):
+
+Allows responses to outgoing connections (ESTABLISHED) and related traffic, ensuring expected response traffic is permitted without opening unnecessary ports.
+
+**Invalid State** (`--state INVALID`):
+Drops anomalous packets that don’t belong to any known connection, which may indicate errors or attacks.
+
+**SSH Rule** (`-p tcp --dport 22 -m state --state NEW,ESTABLISHED`):
+
+Allows only new and ongoing SSH connections on port 22, securing remote access while filtering unexpected traffic.
+
+**Forwarding Rules for TCP and ICMP Traffic:**
+
+**TCP Port 27017**: Permits connections between specific subnets for services like MongoDB, facilitating controlled access.
+
+**ICMP** (Ping): Allows diagnostic ping traffic between subnets, useful for network troubleshooting.
+
+**Default Policy to Drop Incoming and Forwarding Packets** (`-P INPUT DROP and -P FORWARD DROP`):
+
+Blocks all traffic by default unless explicitly allowed, enhancing security by limiting exposure to only necessary connections.
+
+### Configuring port access in DB VM.
+
+**Setting MongoDB port access**
+
+1. Navigate to your **DB virtual machine**.
+2. Go to **Network Settings** under **Networking**.
+3. Click the `tech264-adonis-3-subnet-db-vm-nsg` link next to **Network security group** .
+4. Go to **inbound port rules** and click **Add**.
+5. Under **Source**, select **IP addresses**.
+6. Under **Source IP addresses/CIDR ranges**, input the **public subnet IP** `10.0.2.0/24`.
+7. Change the service to MongoDB.
+8. Change the name appropriately.
  
-3. Go to the **Settings** drop down.
-4. Click **Routes**.
-5. Click **Add**.
+**Create a rule to deny everything else**
+
+1. **Add** another rule.
+2. Input a `*` to the **destination port ranges**.
+3. Change the priority to `500`.
+4. Toggle **Deny**.
+
+### Task: Work out how to get the /posts page working again in the 3-subnet architecture after stoping and starting all 3 VM's
+
+After restarting all 3 VM's the only configurations required are:
+1. SSH into the App VM
+2. Set the Database connection Environment Variable
+
+```bash
+export "DB_HOST=mongodb://10.0.4.4:27017/posts"
+```
+
+3. Change directories to the app.js folder.
+
+```bash
+cd /repo/app
+```
+
+4. Run the application
+
+```bash
+pm2 start app.js
+```
+
+## Task: Research VM availability options on Azure
  
+### What is an Availability Set?
+* An Availability Set in Azure is a *feature* that helps *ensure* your Virtual Machines (*VMs) stay online during planned or unplanned downtime *(e.g., maintenance or hardware failures).
+
+* It *spreads your VMs across multiple isolated hardware nodes* (a physical server or a machine within a data center), making sure they *aren’t all affected by the same failure*.
+ 
+#### How does it work?
+When you place VMs in an Availability Set, Azure automatically distributes them across:
+ 
+* **Fault Domains**: *Physical hardware racks* in the datacenter. If one rack fails, VMs in different racks will continue running.
+
+* **Update Domains**: *Logical groups that allow Azure to perform maintenance on your VMs in stages*. If one update domain is undergoing maintenance, the others will remain online.
+ 
+#### Advantages:
+* **High Availability**: VMs in an Availability Set are *protected from hardware failures* and *planned Azure maintenance*. This improves uptime.
+
+* **Cost-Effective**: There's *no extra cost* for using Availability Sets; you only pay for the VMs you run.
+
+* **Load Balancing**: It helps in *balancing the load across different servers*, ensuring no single server is overwhelmed.
+ 
+#### Disadvantages:
+
+* **Single Datacenter**: Availability Sets protect against failures within a single Azure region, but they *don’t provide protection if the entire datacenter goes offline*.
+
+* **No Zone Redundancy**: Availability Sets *only work within a single Azure region* and *don’t spread VMs across multiple geographic areas* (like Availability Zones can).
+ 
+### What is an Availability Zone? Why superior to an Availability Set? Disadvantages?
+
+#### What is an Availability Zone?
+
+* An Availability Zone is a *physically separate location* within an Azure region.
+
+* Each zone has its own *independent power, cooling, and networking*.
+
+* Azure *guarantees* that if you place VMs in different Availability Zones, they’ll *stay up* even if *one entire zone* (or data center) *fails*.
+ 
+#### Why is it superior to an Availability Set?
+
+* **Geographic Redundancy**: VMs placed in different Availability Zones are *located in separate physical datacenters*. This means that even if one entire datacenter goes down, your other VMs will continue running.
+
+* **Greater Fault Isolation**: Since zones are physically isolated, they *provide better protection against datacenter-wide failures*, unlike Availability Sets, which only protect against rack-level or update-level failures.
+ 
+#### Disadvantages:
+
+* **More Expensive**: Deploying VMs across multiple Availability Zones can be more costly due to the need for *multiple redundant VMs* and the potential for *data transfer costs between zones*.
+
+* **Latency**: While zones are in the same region, there may be slight *network delay* (latency) between VMs *located in different zones* compared to VMs within an Availability Set (which are on the same physical site).
+ 
+### What is a Virtual Machine Scale Set? What type of scaling does it do? How does it work? Limitations?
+ 
+#### What is a Virtual Machine Scale Set?
+
+A Virtual Machine Scale Set (VMSS) allows you to *automatically deploy and manage a group of identical VMs*.
+It enables your application to *automatically scale in or out based on demand*, ensuring you have the right amount of computing resources.
+ 
+#### What type of scaling does it do?
+VM Scale Sets can perform:
+
+* **Horizontal Scaling**: Automatically *adds* (scales out) or *removes* (scales in) VMs based on defined rules or demand.
+
+For example, if your website is experiencing high traffic, new VMs can be added to handle the load. Once traffic reduces, unneeded VMs can be removed.
+ 
+#### How does it work?
+
+1. **Automated Scaling**: You *define scaling rules based on metrics* like CPU usage, memory, or custom metrics. Azure monitors these metrics and adds/removes VMs accordingly.
+
+2. **Load Balancing**: Azure *automatically distributes traffic* across all the VMs in your scale set to make sure no single VM is overloaded.
+
+3. **Fault Tolerance**: VMSS can be configured to use Availability Zones or Availability Sets to ensure high availability.
+ 
+#### Limitations:
+
+* **Homogeneous VMs**: All VMs in a scale set are *identical*, which might not suit applications needing different configurations on different VMs.
+
+* **Scaling Delay**: While VMSS can scale automatically, adding new VMs can *take a few minutes*, meaning it *might not react instantly* to traffic spikes.
+
+* **Complex Configuration**: Setting up and managing scaling rules and auto-scaling behavior can be *complex*, especially for beginners. You need to carefully tune these settings to avoid unnecessary costs or performance issues.
+ 
+ 
+| Feature               | **Advantages**                                                       | **Disadvantages**                                                |
+|-----------------------|----------------------------------------------------------------------|------------------------------------------------------------------|
+| **Availability Set**   | Cost-effective, protects against rack failures, improves uptime within a datacenter | Doesn’t protect against full datacenter failure, limited to a single region |
+| **Availability Zone**  | Protects against datacenter failure, provides greater fault isolation | Higher costs, potential for network latency between zones        |
+| **VM Scale Set**       | Auto-scales based on demand, load balancing built-in, supports Availability Sets/Zones | VMs must be identical, scaling can have delays, more complex to configure |
+
 

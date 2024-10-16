@@ -18,7 +18,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install nginx -y
 echo Done!
 
 # Use sed to update the config to proxy traffic from port 80 to 3000
-echo "Updating Nginx configuration to remove port 3000..."
+echo "Updating Nginx configuration to forward traffic to port 3000..."
 sudo sed -i 's|try_files $uri $uri/ =404;|proxy_pass http://localhost:3000;|' /etc/nginx/sites-available/default
 echo Done!
 

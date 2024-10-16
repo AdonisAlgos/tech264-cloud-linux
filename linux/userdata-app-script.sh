@@ -2,7 +2,7 @@
 
 # Setting an environment variable (DB_HOST) that is looked up when the app runs.
 echo defining env variable
-export "DB_HOST=mongodb://10.0.3.4:27017/posts"
+export "DB_HOST=mongodb://10.0.4.4:27017/posts"
 echo Done!
 
 # Changing directories to point to the app.js file within the repo.
