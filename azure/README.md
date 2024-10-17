@@ -816,18 +816,25 @@ az storage blob upload \
 7. Search for **Storage account** > select the storage to be navigated to the **Overview** page.
 8. Navigate to **Configuration** > and toggle **Allow Blob anonymous access** to enable.
 9. Enter the **Container** > select the **Image** and **Change access level** > **Blob (anonymous read access for blobs only**
-10. Change directories in the VM to point to the views folder inside the app folder
+10. Change directories in the VM to point to the views folder inside the app folder.
 
 ```bash
 cd /repo/app/views
 ```
-10. Add permissions to edit the index.ejs file using sudo
+11. Use superuser privillages to edit the index.ejs file.
 
 ```bash
 sudo nano index.ejs
 ```
 
-11. Run the app.js
+12. Change directories to point to the Sparta app and run it.
+
+```bash
+cd /repo/app
+pm2 start app.js
+```
+
+![Sparta app with cat image](../images/cat-image-sparta-app.png)
 
 *If time:*
 *Do step 3 (which you did on the Azure portal) - set blob access and permissions - using Azure CLI commands. Test your commands work by first setting the blob access and permissions back to private.*
