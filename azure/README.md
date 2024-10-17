@@ -71,6 +71,7 @@
       - [What type of scaling does it do?](#what-type-of-scaling-does-it-do)
       - [How does it work?](#how-does-it-work-1)
       - [Limitations:](#limitations)
+  - [Task: You are going to get a cat picture (jpg) of your choice to display on the Sparta test app front page - the image used will be stored on Azure blob storage.](#task-you-are-going-to-get-a-cat-picture-jpg-of-your-choice-to-display-on-the-sparta-test-app-front-page---the-image-used-will-be-stored-on-azure-blob-storage)
 
 
 ## The basics of Azure
@@ -773,4 +774,60 @@ For example, if your website is experiencing high traffic, new VMs can be added 
 | **Availability Zone**  | Protects against datacenter failure, provides greater fault isolation | Higher costs, potential for network latency between zones        |
 | **VM Scale Set**       | Auto-scales based on demand, load balancing built-in, supports Availability Sets/Zones | VMs must be identical, scaling can have delays, more complex to configure |
 
+## Task: You are going to get a cat picture (jpg) of your choice to display on the Sparta test app front page - the image used will be stored on Azure blob storage.
 
+1. SSH into your Azure VM (make sure VM has the app dependencies installed)
+2. Using the CLI on your VM:
+   1. Insert `curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash` while SSH'd into your VM. This will **download** CLI.
+   2. Insert `az login`. It will provide you with a link and a code. The link directs you to **sign in** to azure with your existing credentials via a web browser. It will then request the **code** to authenticate.
+   3. **Insert** the code on the browser input and select your account.
+   4. Once signed in, close the window and **return** to your VM console.
+   5. Enter the number for the subscription you wish to use.
+   6. Download image from the internet.
+
+```bash   
+curl -o downloadedcat.jpg "https://images.ctfassets.net/ub3bwfd53mwy/5WFv6lEUb1e6kWeP06CLXr/acd328417f24786af98b1750d90813de/4_Image.jpg?w=750"
+```
+
+3. Create a storage account.
+
+```bash
+az storage account create --name tech264adonisstorage --resource-group tech264 --location uksouth --sku Standard_LRS
+```
+4. Create a container called images.
+
+```bash
+az storage container create \
+    --account-name tech264adonisstorage \
+    --name images
+```
+5. Upload the image as a blob file in the images container.
+
+```bash
+az storage blob upload \
+    --account-name tech264adonisstorage \
+    --container-name images \
+    --name uploadedcat.jpg \
+    --file downloadedcat.jpg  \
+    --auth-mode login
+```
+
+6. Navigate to the Azure portal: [https://portal.azure.com](https://portal.azure.com).
+7. Search for **Storage account** > select the storage to be navigated to the **Overview** page.
+8. Navigate to **Configuration** > and toggle **Allow Blob anonymous access** to enable.
+9. Enter the **Container** > select the **Image** and **Change access level** > **Blob (anonymous read access for blobs only**
+10. Change directories in the VM to point to the views folder inside the app folder
+
+```bash
+cd /repo/app/views
+```
+10. Add permissions to edit the index.ejs file using sudo
+
+```bash
+sudo nano index.ejs
+```
+
+11. Run the app.js
+
+*If time:*
+*Do step 3 (which you did on the Azure portal) - set blob access and permissions - using Azure CLI commands. Test your commands work by first setting the blob access and permissions back to private.*
